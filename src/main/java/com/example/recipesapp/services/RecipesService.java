@@ -1,13 +1,18 @@
 package com.example.recipesapp.services;
 
-import com.example.recipesapp.Recipe;
+import com.example.recipesapp.model.Recipe;
 
 import java.util.Map;
 
 public interface RecipesService {
 
-    Recipe addRecipe(Recipe recipe);
+    long addRecipe(Recipe recipe);
 
-    Map<Long, Recipe> getRecipe();
+    Recipe getRecipe(long id);
 
+    Recipe editRecipe(long id, Recipe recipe);
+
+    Map<Long, Recipe> getAllRecipes();
+
+    boolean deleteRecipe(long id);
 }

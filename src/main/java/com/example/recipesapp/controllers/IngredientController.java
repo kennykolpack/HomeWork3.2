@@ -1,6 +1,6 @@
 package com.example.recipesapp.controllers;
 
-import com.example.recipesapp.Ingredient;
+import com.example.recipesapp.model.Ingredient;
 import com.example.recipesapp.services.IngredientsService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,13 +17,41 @@ public class IngredientController {
         this.ingredientsService = ingredientsService;
     }
 
-    @GetMapping("/ingredients")
-    public ResponseEntity<Map<Long, Ingredient>> getIngredient() {
-        return ResponseEntity.ok(ingredientsService.getIngredient());
+    @GetMapping("/{id}")
+    public ResponseEntity<Ingredient> getIngredientById(@PathVariable Long id) {
+        Ingredient ingredient = ingredientsService.getIngredient(id);
+        if (ingredient == null) {
+            ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(ingredient);
     }
 
-    @PostMapping("/ingredients")
-    public ResponseEntity<Ingredient> addIngredient(@RequestBody Ingredient ingredient) {
-        return ResponseEntity.ok(ingredientsService.addIngredient(ingredient));
+    @GetMapping
+    public ResponseEntity<Map<Long,Ingredient>> getAllIngredients() {
+        Map<Long, Ingredient> ingredients = ingredientsService.getAllIngredients();
+        return ResponseEntity.ok(ingredients);
+    }
+
+    @PostMapping
+    public ResponseEntity<Long> addIngredient(@RequestBody Ingredient ingredient) {
+        long id = ingredientsService.addIngredient(ingredient);
+        return ResponseEntity.ok(id);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Ingredient> editIngredient(@PathVariable long id, @RequestBody Ingredient ingredient) {
+        Ingredient ingredient1 = ingredientsService.editIngredient(id, ingredient);
+        if (ingredient1 == null) {
+            ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(ingredient);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteIngredient(@PathVariable long id) {
+        if (ingredientsService.deleteIngredient(id)) {
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.notFound().build();
     }
 }

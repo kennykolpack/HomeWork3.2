@@ -1,12 +1,18 @@
 package com.example.recipesapp.services;
 
-import com.example.recipesapp.Ingredient;
+import com.example.recipesapp.model.Ingredient;
 
 import java.util.Map;
 
 public interface IngredientsService {
 
-    Ingredient addIngredient(Ingredient ingredient);
+    long addIngredient(Ingredient ingredient);
 
-    Map<Long, Ingredient> getIngredient();
+    Ingredient getIngredient(long id);
+
+    Map<Long, Ingredient> getAllIngredients();
+
+    Ingredient editIngredient(long id, Ingredient ingredient);
+
+    boolean deleteIngredient(long id);
 }

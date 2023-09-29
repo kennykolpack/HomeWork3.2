@@ -1,9 +1,11 @@
 package com.example.recipesapp.services.impl;
 
+import com.example.recipesapp.exceptions.FailedToReadException;
 import com.example.recipesapp.services.FilesService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -32,15 +34,26 @@ public class FilesServiceImpl implements FilesService {
     }
 
     @Override
-    public String readFromFileRecipes() {
+    public String readFromFileRecipes() throws FailedToReadException {
         try {
             return Files.readString(Path.of(dataFilePathRecipes, dataFileNameRecipes));
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new FailedToReadException();
         }
     }
 
-    private boolean cleanDataFileRecipes() {
+    @Override
+    public File getDataFileRecipes() {
+        return new File(dataFilePathRecipes + "/" + dataFileNameRecipes);
+    }
+
+    @Override
+    public File getDataFileIngredients() {
+        return new File(dataFilePathIngredients + "/" + dataFileNameIngredients);
+    }
+
+    @Override
+    public boolean cleanDataFileRecipes() {
         try {
             Path path = Path.of(dataFilePathRecipes, dataFileNameRecipes);
             Files.deleteIfExists(path);
@@ -51,6 +64,7 @@ public class FilesServiceImpl implements FilesService {
             return false;
         }
     }
+
     @Override
     public boolean saveToFileIngredients(String json) {
         try {
@@ -63,15 +77,15 @@ public class FilesServiceImpl implements FilesService {
     }
 
     @Override
-    public String readFromFileIngredients() {
+    public String readFromFileIngredients() throws FailedToReadException {
         try {
             return Files.readString(Path.of(dataFilePathIngredients, dataFileNameIngredients));
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new FailedToReadException();
         }
     }
 
-    private boolean cleanDataFileIngredients() {
+    public boolean cleanDataFileIngredients() {
         try {
             Path path = Path.of(dataFilePathIngredients, dataFileNameIngredients);
             Files.deleteIfExists(path);
